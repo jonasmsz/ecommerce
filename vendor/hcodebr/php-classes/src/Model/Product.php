@@ -17,6 +17,21 @@ class Product extends Model {
 
     }
 
+    public static function checklist($list)
+    {
+
+        foreach ($list as &$row) {
+
+            $p = new Product();
+            $p->setData($row);
+            $row = $p->getValues();
+
+        }
+
+        return $list;
+
+    }
+
     public function save()
     {
 
@@ -56,7 +71,7 @@ class Product extends Model {
         $sql = new SqL();
 
         $sql->query("DELETE FROM tb_products WHERE idproduct = :idproduct", [
-            ":idproduct"=>$this->idproduct()
+            ":idproduct"=>$this->getidproduct()
         ]);
 
     }
@@ -73,7 +88,7 @@ class Product extends Model {
             $this->getidproduct() . ".jpg"
             )) {
 
-                $url = "/res/site/img/products/" . $this->getidproduct() . "jpg";
+                $url = "/res/site/img/products/" . $this->getidproduct() . ".jpg";
 
             } else {
 
@@ -106,16 +121,16 @@ class Product extends Model {
 
             case "jpg":
             case "jpeg":
-            $image = imagecreatefromjpeg($file["tmp_name"]);
-            break;
+                $image = imagecreatefromjpeg($file["tmp_name"]);
+                break;
 
             case "gif":
-            $image = imagecreatefromgif($file["tmp_name"]);
-            break;
+                $image = imagecreatefromgif($file["tmp_name"]);
+                break;
 
             case "png":
-            $image = imagecreatefrompng($file["tmp_name"]);
-            break;
+                $image = imagecreatefrompng($file["tmp_name"]);
+                break;
 
         }
 
@@ -128,7 +143,7 @@ class Product extends Model {
 
         imagejpeg($image, $dist);
 
-        imagedestroy ($image);
+        imagedestroy($image);
 
         $this->checkPhoto();
 
