@@ -193,6 +193,7 @@ class User extends Model {
 
     }
 
+
     public static function getForgot($email, $inadmin = true)
     {
 
@@ -209,6 +210,7 @@ class User extends Model {
 
         if (count($results) === 0)
         {
+
             throw new \Exception("Não foi possível recuperar a senha.");
 
         }
@@ -324,6 +326,7 @@ class User extends Model {
 	{
 
 		$_SESSION[User::ERROR] = $msg;
+
 	}
 
 	public static function getError()
@@ -334,18 +337,21 @@ class User extends Model {
 		User::clearError();
 
 		return $msg;
+
 	}
 
 	public static function clearError()
 	{
 
 		$_SESSION[User::ERROR] = NULL;
+
 	}
 
 	public static function setSuccess($msg)
 	{
 
 		$_SESSION[User::SUCCESS] = $msg;
+
 	}
 
 	public static function getSuccess()
@@ -356,18 +362,21 @@ class User extends Model {
 		User::clearSuccess();
 
 		return $msg;
+
 	}
 
 	public static function clearSuccess()
 	{
 
 		$_SESSION[User::SUCCESS] = NULL;
+
 	}
 
 	public static function setErrorRegister($msg)
 	{
 
 		$_SESSION[User::ERROR_REGISTER] = $msg;
+
 	}
 
 	public static function getErrorRegister()
@@ -378,12 +387,14 @@ class User extends Model {
 		User::clearErrorRegister();
 
 		return $msg;
+
 	}
 
 	public static function clearErrorRegister()
 	{
 
 		$_SESSION[User::ERROR_REGISTER] = NULL;
+
 	}
 
     public static function checkLoginExist($login)
@@ -396,6 +407,7 @@ class User extends Model {
 		]);
 
 		return (count($results) > 0);
+
 	}
 
 	public static function getPasswordHash($password)
@@ -404,7 +416,30 @@ class User extends Model {
 		return password_hash($password, PASSWORD_DEFAULT, [
 			'cost' => 12
 		]);
+
 	}
+
+    public function getOrders()
+    {
+
+        $sql = new Sql();
+
+        $results = $sql->select("
+            SELECT * 
+            FROM tb_orders a
+            INNER JOIN tb_ordersstatus b USING(idstatus)
+            INNER JOIN tb_carts c USING(idcart)
+            INNER JOIN tb_users d ON d.iduser = a.iduser
+            INNER JOIN tb_addresses e USING(idaddress)
+            INNER JOIN tb_persons f ON f.idperson = d.idperson
+            WHERE a.iduser = :iduser
+        ", [
+            ':iduser'=>$this->getiduser()
+        ]);
+
+        return $results;
+
+    }
 
 }
 
