@@ -1,5 +1,4 @@
-<?php if(!class_exists('Rain\Tpl')){exit;}?><form method="post" 
-action="https://pagseguro.uol.com.br/v2/checkout/payment.html">  
+<?php if(!class_exists('Rain\Tpl')){exit;}?><form method="post" action="https://pagseguro.uol.com.br/v2/checkout/payment.html">  
           
     <!-- Campos obrigatórios -->  
     <input name="receiverEmail" type="hidden" value="pagseguro@html5dev.com.br">  
